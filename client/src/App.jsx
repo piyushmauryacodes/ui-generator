@@ -4,6 +4,9 @@ import { LiveProvider, LiveError, LivePreview } from 'react-live';
 import { Scope } from './components/UIComponents';
 import { Send, RotateCcw, Code, Eye, Loader2, History } from 'lucide-react';
 
+// Dynamically choose the URL based on the environment
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
+
 const App = () => {
   const [prompt, setPrompt] = useState("");
   const [code, setCode] = useState("<Container>\n  <Alert type='info'>Describe a UI to generate it!</Alert>\n</Container>");
@@ -19,7 +22,8 @@ const App = () => {
     if (!prompt) return;
     setLoading(true);
     try {
-      const res = await axios.post('http://localhost:5001/api/generate', {
+      // Replaced localhost with API_BASE_URL
+      const res = await axios.post(`${API_BASE_URL}/api/generate`, {
         userPrompt: prompt,
         currentCode: code
       });
@@ -29,14 +33,15 @@ const App = () => {
       fetchVersions();
       setPrompt(""); // Clear input
     } catch (err) {
-      alert("Error: Ensure Backend is running on port 5000");
+      alert("Error: Cannot connect to the backend server.");
     }
     setLoading(false);
   };
 
   const fetchVersions = async () => {
     try {
-      const res = await axios.get('http://localhost:5001/api/versions');
+      // Replaced localhost with API_BASE_URL
+      const res = await axios.get(`${API_BASE_URL}/api/versions`);
       setVersions(res.data);
     } catch (e) { console.error("No backend connection"); }
   };
