@@ -8,7 +8,10 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://vercel.com/piyushmauryacodes-projects/ui-generator',
+  credentials: true
+})); 
 app.use(express.json());
 
 // Absolute log path
