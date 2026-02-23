@@ -8,10 +8,22 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-app.use(cors({
-  origin: 'https://vercel.com/piyushmauryacodes-projects/ui-generator',
+
+// --- FIXED CORS CONFIGURATION ---
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like Postman), localhost, and any Vercel domain
+    if (!origin || origin.includes('vercel.app') || origin.includes('localhost')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
-})); 
+};
+app.use(cors(corsOptions));
+// --------------------------------
+
 app.use(express.json());
 
 // Absolute log path
